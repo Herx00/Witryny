@@ -1,0 +1,35 @@
+
+<body>
+    <p></p>
+    <input type="button"></input>
+</body>
+<script>
+const gen = () => {
+    var wagi = '73173173'
+    var alfabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    var numer = '' //numer dowodu
+    var pc = '' //pierwsza część numeru
+    var dc = '' //druga część numeru
+    var lk = 0 //liczba kontrolna
+    for(let c = 0; c < 3; c++) {
+        pc += alfabet[Math.floor(Math.random() * alfabet.length)]
+        lk += parseInt(wagi[c]) * (alfabet.indexOf(pc[c]) + 10)
+    }
+       for(let c = 0; c < 5; c++) {
+        dc += Math.floor(Math.random() * 10)
+        lk += parseInt(wagi[c + 3]) * (parseInt(dc[c]))
+    } 
+    
+    lk = lk % 10
+    numer = pc + lk + dc
+    
+    return numer
+}
+
+var p = document.getElementsByTagName('p')[0]
+var btn = document.getElementsByTagName('input')[0]
+btn.value = 'generuj numer dowodu'
+btn.onclick = () => {
+    p.innerHTML = gen()
+}
+</script>

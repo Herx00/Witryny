@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Gra</title>
+</head>
+<body>
+	<p id='czas'>30 s</p>
+	<p id='akapit'>Wpisz wyrazy tak jak na wzorze (czas to 30s):</p>
+	<input type='text' id='pole_wejsciowe'>
+	<input type='button' id='przycisk' value='start'>
+</body>
+</html>
+
+<script>
+var wynik = 0;
+var timer = 30;
+var stan_gry = 0; //0 -> gra się jeszcze nie zaczeła//1 -> gracz może wpisać dane//2 -> poprawna odpowiedź / przejście do następnego pytania//
+var wyrazenia = ['^[0+1]$','[35]','[0-€]{2}-[09]{h}','^\\w{5}$'];
+
+var czas = document.getElementById('czas');
+var akapit = document.getElementById('akapit');
+var pole_wejsciowe = document.getElementById('pole_wejsciowe');
+var przycisk = document.getElementById('przycisk');
+
+przycisk.onclick = function() {
+	if(stan_gry == 0) {
+		stan_gry = 2;
+		przycisk.value = 'wyślij';
+		akapit.innerText = wyrazenia[wynik]
+		
+		const interval = setInterval(function() {
+			timer -= 1;
+			czas.innerText = timer + ' s';
+			if(timer == 0) {
+				clearInterval(interval);
+				akapit.innerHTML = `<h1>Game Over</h1><h1>Score: ${wynik}</h1><h1>Time: 30</h1>`;
+				czas.style.display = 'none';
+				pole_wejsciowe.style.background = 'white';
+				pole_wejsciowe.value = '';
+				pole_wejsciowe.disabled, przycisk.disabled = true;
+			}
+		}, 1000)
+
+	} else if(stan_gry == 1) {
+		stan_gry = 2;
+
+		pole_wejsciowe.style.background = 'white';
+		pole_wejsciowe.value = '';
+		przycisk.value = 'wyślij';
+		akapit.innerText = wyrazenia[wynik];
+
+	} else if(stan_gry == 2) {
+		if(RegExp(akapit.innerText).test(pole_wejsciowe.value)) {
+			wynik += 1
+			stan_gry = 1
+
+			pole_wejsciowe.style.background = 'green'
+			przycisk.value = 'next'
+		} else {
+			pole_wejsciowe.style.background = 'red'
+		}
+	}
+}
+</script>
